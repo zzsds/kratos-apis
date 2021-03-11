@@ -19,34 +19,34 @@ var _ = mux.NewRouter
 
 const _ = http1.SupportPackageIsVersion1
 
-type UserHandler interface {
-	CreateUser(context.Context, *CreateUserRequest) (*CreateUserReply, error)
+type ProfileHandler interface {
+	CreateProfile(context.Context, *CreateProfileRequest) (*CreateProfileReply, error)
 
-	DeleteUser(context.Context, *DeleteUserRequest) (*DeleteUserReply, error)
+	DeleteProfile(context.Context, *DeleteProfileRequest) (*DeleteProfileReply, error)
 
-	GetUser(context.Context, *GetUserRequest) (*GetUserReply, error)
+	GetProfile(context.Context, *GetProfileRequest) (*GetProfileReply, error)
 
-	ListUser(context.Context, *ListUserRequest) (*ListUserReply, error)
+	ListProfile(context.Context, *ListProfileRequest) (*ListProfileReply, error)
 
-	UpdateUser(context.Context, *UpdateUserRequest) (*UpdateUserReply, error)
+	UpdateProfile(context.Context, *UpdateProfileRequest) (*UpdateProfileReply, error)
 }
 
-func NewUserHandler(srv UserHandler, opts ...http1.HandleOption) http.Handler {
+func NewProfileHandler(srv ProfileHandler, opts ...http1.HandleOption) http.Handler {
 	h := http1.DefaultHandleOptions()
 	for _, o := range opts {
 		o(&h)
 	}
 	r := mux.NewRouter()
 
-	r.HandleFunc("/v1/user", func(w http.ResponseWriter, r *http.Request) {
-		var in CreateUserRequest
+	r.HandleFunc("/api.kratos.user.v1.Profile/CreateProfile", func(w http.ResponseWriter, r *http.Request) {
+		var in CreateProfileRequest
 		if err := h.Decode(r, &in); err != nil {
 			h.Error(w, r, err)
 			return
 		}
 
 		next := func(ctx context.Context, req interface{}) (interface{}, error) {
-			return srv.CreateUser(ctx, req.(*CreateUserRequest))
+			return srv.CreateProfile(ctx, req.(*CreateProfileRequest))
 		}
 		if h.Middleware != nil {
 			next = h.Middleware(next)
@@ -56,26 +56,21 @@ func NewUserHandler(srv UserHandler, opts ...http1.HandleOption) http.Handler {
 			h.Error(w, r, err)
 			return
 		}
-		reply := out.(*CreateUserReply)
+		reply := out.(*CreateProfileReply)
 		if err := h.Encode(w, r, reply); err != nil {
 			h.Error(w, r, err)
 		}
 	}).Methods("POST")
 
-	r.HandleFunc("/v1/user/{id}", func(w http.ResponseWriter, r *http.Request) {
-		var in UpdateUserRequest
+	r.HandleFunc("/api.kratos.user.v1.Profile/UpdateProfile", func(w http.ResponseWriter, r *http.Request) {
+		var in UpdateProfileRequest
 		if err := h.Decode(r, &in); err != nil {
 			h.Error(w, r, err)
 			return
 		}
 
-		if err := binding.MapProto(&in, mux.Vars(r)); err != nil {
-			h.Error(w, r, err)
-			return
-		}
-
 		next := func(ctx context.Context, req interface{}) (interface{}, error) {
-			return srv.UpdateUser(ctx, req.(*UpdateUserRequest))
+			return srv.UpdateProfile(ctx, req.(*UpdateProfileRequest))
 		}
 		if h.Middleware != nil {
 			next = h.Middleware(next)
@@ -85,26 +80,21 @@ func NewUserHandler(srv UserHandler, opts ...http1.HandleOption) http.Handler {
 			h.Error(w, r, err)
 			return
 		}
-		reply := out.(*UpdateUserReply)
+		reply := out.(*UpdateProfileReply)
 		if err := h.Encode(w, r, reply); err != nil {
 			h.Error(w, r, err)
 		}
-	}).Methods("PUT")
+	}).Methods("POST")
 
-	r.HandleFunc("/v1/user/{id}", func(w http.ResponseWriter, r *http.Request) {
-		var in DeleteUserRequest
+	r.HandleFunc("/api.kratos.user.v1.Profile/DeleteProfile", func(w http.ResponseWriter, r *http.Request) {
+		var in DeleteProfileRequest
 		if err := h.Decode(r, &in); err != nil {
 			h.Error(w, r, err)
 			return
 		}
 
-		if err := binding.MapProto(&in, mux.Vars(r)); err != nil {
-			h.Error(w, r, err)
-			return
-		}
-
 		next := func(ctx context.Context, req interface{}) (interface{}, error) {
-			return srv.DeleteUser(ctx, req.(*DeleteUserRequest))
+			return srv.DeleteProfile(ctx, req.(*DeleteProfileRequest))
 		}
 		if h.Middleware != nil {
 			next = h.Middleware(next)
@@ -114,26 +104,21 @@ func NewUserHandler(srv UserHandler, opts ...http1.HandleOption) http.Handler {
 			h.Error(w, r, err)
 			return
 		}
-		reply := out.(*DeleteUserReply)
+		reply := out.(*DeleteProfileReply)
 		if err := h.Encode(w, r, reply); err != nil {
 			h.Error(w, r, err)
 		}
-	}).Methods("DELETE")
+	}).Methods("POST")
 
-	r.HandleFunc("/v1/user/{id}/{name}", func(w http.ResponseWriter, r *http.Request) {
-		var in GetUserRequest
+	r.HandleFunc("/api.kratos.user.v1.Profile/GetProfile", func(w http.ResponseWriter, r *http.Request) {
+		var in GetProfileRequest
 		if err := h.Decode(r, &in); err != nil {
 			h.Error(w, r, err)
 			return
 		}
 
-		if err := binding.MapProto(&in, mux.Vars(r)); err != nil {
-			h.Error(w, r, err)
-			return
-		}
-
 		next := func(ctx context.Context, req interface{}) (interface{}, error) {
-			return srv.GetUser(ctx, req.(*GetUserRequest))
+			return srv.GetProfile(ctx, req.(*GetProfileRequest))
 		}
 		if h.Middleware != nil {
 			next = h.Middleware(next)
@@ -143,21 +128,21 @@ func NewUserHandler(srv UserHandler, opts ...http1.HandleOption) http.Handler {
 			h.Error(w, r, err)
 			return
 		}
-		reply := out.(*GetUserReply)
+		reply := out.(*GetProfileReply)
 		if err := h.Encode(w, r, reply); err != nil {
 			h.Error(w, r, err)
 		}
-	}).Methods("GET")
+	}).Methods("POST")
 
-	r.HandleFunc("/api.kratos.user.v1.User/ListUser", func(w http.ResponseWriter, r *http.Request) {
-		var in ListUserRequest
+	r.HandleFunc("/api.kratos.user.v1.Profile/ListProfile", func(w http.ResponseWriter, r *http.Request) {
+		var in ListProfileRequest
 		if err := h.Decode(r, &in); err != nil {
 			h.Error(w, r, err)
 			return
 		}
 
 		next := func(ctx context.Context, req interface{}) (interface{}, error) {
-			return srv.ListUser(ctx, req.(*ListUserRequest))
+			return srv.ListProfile(ctx, req.(*ListProfileRequest))
 		}
 		if h.Middleware != nil {
 			next = h.Middleware(next)
@@ -167,7 +152,7 @@ func NewUserHandler(srv UserHandler, opts ...http1.HandleOption) http.Handler {
 			h.Error(w, r, err)
 			return
 		}
-		reply := out.(*ListUserReply)
+		reply := out.(*ListProfileReply)
 		if err := h.Encode(w, r, reply); err != nil {
 			h.Error(w, r, err)
 		}

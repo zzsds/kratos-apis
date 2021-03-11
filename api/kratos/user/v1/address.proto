@@ -1,0 +1,30 @@
+syntax = "proto3";
+
+package api.kratos.user.v1;
+
+option go_package = "github.com/zzsds/kratos-apis/api/kratos/user/v1;v1";
+option java_multiple_files = true;
+option java_package = "api.kratos.user.v1";
+
+service Address {
+    rpc CreateAddress (CreateAddressRequest) returns (CreateAddressReply);
+    rpc UpdateAddress (UpdateAddressRequest) returns (UpdateAddressReply);
+    rpc DeleteAddress (DeleteAddressRequest) returns (DeleteAddressReply);
+    rpc GetAddress (GetAddressRequest) returns (GetAddressReply);
+    rpc ListAddress (ListAddressRequest) returns (ListAddressReply);
+}
+
+message CreateAddressRequest {}
+message CreateAddressReply {}
+
+message UpdateAddressRequest {}
+message UpdateAddressReply {}
+
+message DeleteAddressRequest {}
+message DeleteAddressReply {}
+
+message GetAddressRequest {}
+message GetAddressReply {}
+
+message ListAddressRequest {}
+message ListAddressReply {}

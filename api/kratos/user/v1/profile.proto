@@ -1,0 +1,30 @@
+syntax = "proto3";
+
+package api.kratos.user.v1;
+
+option go_package = "github.com/zzsds/kratos-apis/api/kratos/user/v1;v1";
+option java_multiple_files = true;
+option java_package = "api.kratos.user.v1";
+
+service Profile {
+    rpc CreateProfile (CreateProfileRequest) returns (CreateProfileReply);
+    rpc UpdateProfile (UpdateProfileRequest) returns (UpdateProfileReply);
+    rpc DeleteProfile (DeleteProfileRequest) returns (DeleteProfileReply);
+    rpc GetProfile (GetProfileRequest) returns (GetProfileReply);
+    rpc ListProfile (ListProfileRequest) returns (ListProfileReply);
+}
+
+message CreateProfileRequest {}
+message CreateProfileReply {}
+
+message UpdateProfileRequest {}
+message UpdateProfileReply {}
+
+message DeleteProfileRequest {}
+message DeleteProfileReply {}
+
+message GetProfileRequest {}
+message GetProfileReply {}
+
+message ListProfileRequest {}
+message ListProfileReply {}
