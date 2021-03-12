@@ -1,0 +1,50 @@
+syntax = "proto3";
+
+package api.user.v1.profile;
+
+option go_package = "github.com/zzsds/api-apis/api/user/v1/profile;profile";
+option java_multiple_files = true;
+option java_package = "api.user.v1.prifle";
+
+import "google/api/annotations.proto";
+
+service Profile {
+    rpc CreateProfile (CreateProfileRequest) returns (CreateProfileReply) {
+        option (google.api.http) = {
+            post: "/v1/user"
+            body: "*"
+        };
+    };
+    rpc UpdateProfile (UpdateProfileRequest) returns (UpdateProfileReply) {
+        option (google.api.http) = {
+            put: "/v1/user/{id}"
+            body: "*"
+        };
+    };
+    rpc DeleteProfile (DeleteProfileRequest) returns (DeleteProfileReply) {
+        option (google.api.http) = {
+            delete: "/v1/user/{id}"
+        };
+    };
+    rpc GetProfile (GetProfileRequest) returns (GetProfileReply) {
+        option (google.api.http) = {
+            get: "/v1/user/{id}/{name}"
+        };
+    };
+    rpc ListProfile (ListProfileRequest) returns (ListProfileReply);
+}
+
+message CreateProfileRequest {}
+message CreateProfileReply {}
+
+message UpdateProfileRequest {}
+message UpdateProfileReply {}
+
+message DeleteProfileRequest {}
+message DeleteProfileReply {}
+
+message GetProfileRequest {}
+message GetProfileReply {}
+
+message ListProfileRequest {}
+message ListProfileReply {}

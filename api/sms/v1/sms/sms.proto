@@ -1,0 +1,30 @@
+syntax = "proto3";
+
+package api.sms.v1.sms;
+
+option go_package = "github.com/zzsds/kratos-apis/api/sms/v1/sms;sms";
+option java_multiple_files = true;
+option java_package = "api.sms.v1.sms";
+
+service Sms {
+    rpc CreateSms (CreateSmsRequest) returns (CreateSmsReply);
+    rpc UpdateSms (UpdateSmsRequest) returns (UpdateSmsReply);
+    rpc DeleteSms (DeleteSmsRequest) returns (DeleteSmsReply);
+    rpc GetSms (GetSmsRequest) returns (GetSmsReply);
+    rpc ListSms (ListSmsRequest) returns (ListSmsReply);
+}
+
+message CreateSmsRequest {}
+message CreateSmsReply {}
+
+message UpdateSmsRequest {}
+message UpdateSmsReply {}
+
+message DeleteSmsRequest {}
+message DeleteSmsReply {}
+
+message GetSmsRequest {}
+message GetSmsReply {}
+
+message ListSmsRequest {}
+message ListSmsReply {}

@@ -1,0 +1,66 @@
+syntax = "proto3";
+
+package api.user.v1.auth;
+
+option go_package = "github.com/zzsds/api-apis/api/user/v1/auth;auth";
+option java_multiple_files = true;
+option java_package = "api.user.v1.auth";
+
+import "google/protobuf/timestamp.proto";
+import "google/api/annotations.proto";
+
+service Auth {
+    rpc Register (RegisterRequest) returns (RegisterReply) {
+        option (google.api.http) = {
+            post: "/v1/auth/register"
+            body: "*"
+        };
+    };
+    rpc Login (LoginRequest) returns (LoginReply) {
+        option (google.api.http) = {
+            post: "/v1/auth/login"
+            body: "*"
+        };
+    };
+    rpc ResetPassword (ResetPasswordRequest) returns (ResetPasswordReply) {
+        option (google.api.http) = {
+            post: "/v1/auth/resetPassword"
+            body: "*"
+        };
+    };
+}
+
+message RegisterRequest {
+    string name = 1;
+    string mobile = 2;
+    string password = 3;
+	string email = 4;
+	string nickname = 5;
+	string realname = 6;
+	string source = 7;
+	google.protobuf.Timestamp birthday = 9;
+}
+
+message RegisterReply {
+    bool success = 1;
+}
+
+message LoginRequest {
+    string mobile = 1;
+    string password = 2;
+}
+message LoginReply {
+    int32 id = 1;
+    string token = 2;
+    string expiresAt = 3;
+    map<string,string> other = 4;
+}
+
+message ResetPasswordRequest {
+    int32 id = 1;
+    string mobile = 2;
+    string password = 3;
+}
+message ResetPasswordReply {
+    bool success = 1;
+}

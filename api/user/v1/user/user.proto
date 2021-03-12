@@ -1,0 +1,177 @@
+syntax = "proto3";
+
+package api.user.v1.user;
+
+option go_package = "github.com/zzsds/api-apis/api/user/v1/user;user";
+option java_multiple_files = true;
+option java_package = "api.user.v1.user";
+
+import "google/protobuf/timestamp.proto";
+
+service User {
+	rpc GetMobile(MobileRequest) returns (MobileReply) {};
+	rpc ModifyPassword(ModifyPassRequest) returns (ModifyPassReply) {};
+	rpc ModifyMobile(ModifyMobileRequest) returns (ModifyMobileReply) {};
+	rpc ModifyName(ModifyNameRequest) returns (ModifyNameReply) {};
+	rpc FindMobile(FindMobileRequest) returns (FindMobileReply) {};
+	rpc FindCode(FindCodeRequest) returns (FindCodeReply) {};
+	rpc FindLikeMobileList(FindLikeMobileRequest) returns (List) {};
+	rpc FindInMobileList(FindInMobileRequest) returns (List) {};
+	rpc FindID(FindIdRequest) returns (FindIdReply) {};
+	rpc FindInIDList(FindInIdRequest) returns (List) {};
+	rpc FindSourceList(FindSourceRequest) returns (List) {};
+	rpc SourceTypeList(SourceTypeRequest) returns (SourceTypeReply) {};
+	rpc SearchPage(SearchPageRequest) returns (List) {};
+}
+
+enum Enabled {
+	No = 0;
+	Yes = 1;
+}
+
+message SearchPageRequest {
+	int32 page = 1;
+	int32 size = 2;
+	message Condition {
+		string mobile = 1;
+		Between createdAt = 2;
+	}
+	Condition condition = 3;
+	repeated Order order = 4;
+}
+
+message Between {
+	google.protobuf.Timestamp start = 1;
+	google.protobuf.Timestamp end = 2;
+}
+
+enum SortType {
+	ASC = 0;
+	DESC = 2;
+}
+
+message Order {
+	string key = 1;
+	SortType val = 2;
+}
+
+message Pagination {
+	int32 page = 1;
+	int32 size = 2;
+	repeated string condition = 3;
+	repeated string order = 4;
+	repeated string group = 5;
+}
+
+
+message Resource {
+	string name = 1;
+	string nickname = 2;
+	string realname = 3;
+	string mobile = 4;
+	string email = 5;
+	string code = 6;
+	string source = 7;
+	google.protobuf.Timestamp birthday = 8;
+	Enabled enabled = 9;
+	int32 id = 10;
+	google.protobuf.Timestamp createdAt = 11;
+	google.protobuf.Timestamp updatedAt = 12;
+}
+
+message List {
+	repeated Resource data = 1;
+	int32 total = 2;
+}
+
+message ShowRequest {
+	int32 id = 1;
+}
+
+message ShowReply {
+	Resource data = 1;
+}
+
+message MobileRequest {
+	string mobile = 1;
+}
+
+message MobileReply {
+	Resource data = 1;
+}
+
+message ModifyPassRequest {
+	int32 id = 1;
+	string oldPassword = 2;
+	string password = 3;
+}
+
+message ModifyPassReply {
+	bool success = 1;
+}
+
+message ModifyMobileRequest {
+	int32 id = 1;
+	string oldMobile = 2;
+	string mobile = 3;
+}
+
+message ModifyMobileReply {
+	bool success = 1;
+}
+
+message ModifyNameRequest {
+	int32 id = 1;
+	string name = 2;
+}
+
+message ModifyNameReply {
+	bool success = 1;
+}
+
+message FindInIdRequest {
+	repeated int32 id = 1;
+}
+
+message FindInMobileRequest {
+	repeated string mobile = 1;
+}
+
+message FindLikeMobileRequest {
+	string mobile = 1;
+}
+
+message FindSourceRequest {
+	string source = 1;
+}
+
+message FindMobileRequest {
+	string mobile = 1;
+}
+
+message FindMobileReply {
+	Resource data = 1;
+}
+
+message SourceTypeRequest {
+}
+
+message SourceTypeReply {
+	repeated string type = 1;
+}
+
+message FindCodeRequest {
+	string code = 1;
+}
+
+message FindCodeReply {
+	Resource data = 1;
+}
+
+message FindIdRequest {
+	int32 id = 1;
+}
+
+message FindIdReply {
+	Resource data = 1;
+}
