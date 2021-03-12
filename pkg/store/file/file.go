@@ -10,7 +10,7 @@ import (
 	"sync"
 	"time"
 
-	"github.com/zzsds/kratos-apis/store"
+	"github.com/zzsds/kratos-apis/pkg/store"
 	bolt "go.etcd.io/bbolt"
 )
 

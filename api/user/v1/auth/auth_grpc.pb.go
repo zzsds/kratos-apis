@@ -18,6 +18,7 @@ const _ = grpc.SupportPackageIsVersion7
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type AuthClient interface {
+	Test(ctx context.Context, in *RegisterRequest, opts ...grpc.CallOption) (*RegisterRequest, error)
 	Register(ctx context.Context, in *RegisterRequest, opts ...grpc.CallOption) (*RegisterReply, error)
 	Login(ctx context.Context, in *LoginRequest, opts ...grpc.CallOption) (*LoginReply, error)
 	ResetPassword(ctx context.Context, in *ResetPasswordRequest, opts ...grpc.CallOption) (*ResetPasswordReply, error)
@@ -29,6 +30,15 @@ type authClient struct {
 
 func NewAuthClient(cc grpc.ClientConnInterface) AuthClient {
 	return &authClient{cc}
+}
+
+func (c *authClient) Test(ctx context.Context, in *RegisterRequest, opts ...grpc.CallOption) (*RegisterRequest, error) {
+	out := new(RegisterRequest)
+	err := c.cc.Invoke(ctx, "/api.user.v1.auth.Auth/Test", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
 }
 
 func (c *authClient) Register(ctx context.Context, in *RegisterRequest, opts ...grpc.CallOption) (*RegisterReply, error) {
@@ -62,6 +72,7 @@ func (c *authClient) ResetPassword(ctx context.Context, in *ResetPasswordRequest
 // All implementations must embed UnimplementedAuthServer
 // for forward compatibility
 type AuthServer interface {
+	Test(context.Context, *RegisterRequest) (*RegisterRequest, error)
 	Register(context.Context, *RegisterRequest) (*RegisterReply, error)
 	Login(context.Context, *LoginRequest) (*LoginReply, error)
 	ResetPassword(context.Context, *ResetPasswordRequest) (*ResetPasswordReply, error)
@@ -72,6 +83,9 @@ type AuthServer interface {
 type UnimplementedAuthServer struct {
 }
 
+func (UnimplementedAuthServer) Test(context.Context, *RegisterRequest) (*RegisterRequest, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Test not implemented")
+}
 func (UnimplementedAuthServer) Register(context.Context, *RegisterRequest) (*RegisterReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Register not implemented")
 }
@@ -92,6 +106,24 @@ type UnsafeAuthServer interface {
 
 func RegisterAuthServer(s grpc.ServiceRegistrar, srv AuthServer) {
 	s.RegisterService(&Auth_ServiceDesc, srv)
+}
+
+func _Auth_Test_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(RegisterRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AuthServer).Test(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/api.user.v1.auth.Auth/Test",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AuthServer).Test(ctx, req.(*RegisterRequest))
+	}
+	return interceptor(ctx, in, info, handler)
 }
 
 func _Auth_Register_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
@@ -155,6 +187,10 @@ var Auth_ServiceDesc = grpc.ServiceDesc{
 	ServiceName: "api.user.v1.auth.Auth",
 	HandlerType: (*AuthServer)(nil),
 	Methods: []grpc.MethodDesc{
+		{
+			MethodName: "Test",
+			Handler:    _Auth_Test_Handler,
+		},
 		{
 			MethodName: "Register",
 			Handler:    _Auth_Register_Handler,

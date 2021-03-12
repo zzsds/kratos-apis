@@ -7,7 +7,7 @@ import (
 	"time"
 
 	"github.com/kr/pretty"
-	"github.com/zzsds/kratos-apis/store"
+	"github.com/zzsds/kratos-apis/pkg/store"
 )
 
 func TestMemoryReInit(t *testing.T) {

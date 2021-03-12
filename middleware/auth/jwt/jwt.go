@@ -33,7 +33,8 @@ func Server(opts ...Option) middleware.Middleware {
 	log := log.NewHelper("middleware/jwt", options.logger)
 	return func(handler middleware.Handler) middleware.Handler {
 		return func(ctx context.Context, req interface{}) (reply interface{}, err error) {
-			log.Errorf("fdasfdsafds a")
+			log.Errorf("fdasfdsafds a---这个是测试")
+			reply, err = handler(ctx, req)
 			return
 		}
 	}

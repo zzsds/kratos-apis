@@ -6,9 +6,15 @@ option go_package = "github.com/zzsds/api-apis/api/user/v1/user;user";
 option java_multiple_files = true;
 option java_package = "api.user.v1.user";
 
+import "google/api/annotations.proto";
 import "google/protobuf/timestamp.proto";
 
 service User {
+	rpc Test(TestRequest) returns (TestReply) {
+		option (google.api.http) = {
+			get: "/v1/user/{name}"
+		};
+	}
 	rpc GetMobile(MobileRequest) returns (MobileReply) {};
 	rpc ModifyPassword(ModifyPassRequest) returns (ModifyPassReply) {};
 	rpc ModifyMobile(ModifyMobileRequest) returns (ModifyMobileReply) {};
@@ -22,6 +28,13 @@ service User {
 	rpc FindSourceList(FindSourceRequest) returns (List) {};
 	rpc SourceTypeList(SourceTypeRequest) returns (SourceTypeReply) {};
 	rpc SearchPage(SearchPageRequest) returns (List) {};
+}
+
+message TestRequest {
+	string name = 1;
+}
+message TestReply {
+	string name = 1;
 }
 
 enum Enabled {

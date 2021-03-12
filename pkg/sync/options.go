@@ -3,7 +3,7 @@ package sync
 import (
 	"time"
 
-	"github.com/zzsds/kratos-apis/store"
+	"github.com/zzsds/kratos-apis/pkg/store"
 )
 
 // Options represents Sync options

@@ -45,6 +45,8 @@ type UserHandler interface {
 	SearchPage(context.Context, *SearchPageRequest) (*List, error)
 
 	SourceTypeList(context.Context, *SourceTypeRequest) (*SourceTypeReply, error)
+
+	Test(context.Context, *TestRequest) (*TestReply, error)
 }
 
 func NewUserHandler(srv UserHandler, opts ...http1.HandleOption) http.Handler {
@@ -53,6 +55,35 @@ func NewUserHandler(srv UserHandler, opts ...http1.HandleOption) http.Handler {
 		o(&h)
 	}
 	r := mux.NewRouter()
+
+	r.HandleFunc("/v1/user/{name}", func(w http.ResponseWriter, r *http.Request) {
+		var in TestRequest
+		if err := h.Decode(r, &in); err != nil {
+			h.Error(w, r, err)
+			return
+		}
+
+		if err := binding.MapProto(&in, mux.Vars(r)); err != nil {
+			h.Error(w, r, err)
+			return
+		}
+
+		next := func(ctx context.Context, req interface{}) (interface{}, error) {
+			return srv.Test(ctx, req.(*TestRequest))
+		}
+		if h.Middleware != nil {
+			next = h.Middleware(next)
+		}
+		out, err := next(r.Context(), &in)
+		if err != nil {
+			h.Error(w, r, err)
+			return
+		}
+		reply := out.(*TestReply)
+		if err := h.Encode(w, r, reply); err != nil {
+			h.Error(w, r, err)
+		}
+	}).Methods("GET")
 
 	r.HandleFunc("/api.user.v1.user.User/GetMobile", func(w http.ResponseWriter, r *http.Request) {
 		var in MobileRequest

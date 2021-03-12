@@ -5,8 +5,8 @@ import (
 	"fmt"
 
 	"github.com/pkg/errors"
-	"github.com/zzsds/kratos-apis/store"
-	"github.com/zzsds/kratos-apis/store/memory"
+	"github.com/zzsds/kratos-apis/pkg/store"
+	"github.com/zzsds/kratos-apis/pkg/store/memory"
 )
 
 type cache struct {

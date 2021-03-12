@@ -9,7 +9,7 @@ import (
 
 	"github.com/patrickmn/go-cache"
 	"github.com/pkg/errors"
-	"github.com/zzsds/kratos-apis/store"
+	"github.com/zzsds/kratos-apis/pkg/store"
 )
 
 // NewStore returns a memory store

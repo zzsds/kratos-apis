@@ -18,6 +18,7 @@ const _ = grpc.SupportPackageIsVersion7
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type UserClient interface {
+	Test(ctx context.Context, in *TestRequest, opts ...grpc.CallOption) (*TestReply, error)
 	GetMobile(ctx context.Context, in *MobileRequest, opts ...grpc.CallOption) (*MobileReply, error)
 	ModifyPassword(ctx context.Context, in *ModifyPassRequest, opts ...grpc.CallOption) (*ModifyPassReply, error)
 	ModifyMobile(ctx context.Context, in *ModifyMobileRequest, opts ...grpc.CallOption) (*ModifyMobileReply, error)
@@ -39,6 +40,15 @@ type userClient struct {
 
 func NewUserClient(cc grpc.ClientConnInterface) UserClient {
 	return &userClient{cc}
+}
+
+func (c *userClient) Test(ctx context.Context, in *TestRequest, opts ...grpc.CallOption) (*TestReply, error) {
+	out := new(TestReply)
+	err := c.cc.Invoke(ctx, "/api.user.v1.user.User/Test", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
 }
 
 func (c *userClient) GetMobile(ctx context.Context, in *MobileRequest, opts ...grpc.CallOption) (*MobileReply, error) {
@@ -162,6 +172,7 @@ func (c *userClient) SearchPage(ctx context.Context, in *SearchPageRequest, opts
 // All implementations must embed UnimplementedUserServer
 // for forward compatibility
 type UserServer interface {
+	Test(context.Context, *TestRequest) (*TestReply, error)
 	GetMobile(context.Context, *MobileRequest) (*MobileReply, error)
 	ModifyPassword(context.Context, *ModifyPassRequest) (*ModifyPassReply, error)
 	ModifyMobile(context.Context, *ModifyMobileRequest) (*ModifyMobileReply, error)
@@ -182,6 +193,9 @@ type UserServer interface {
 type UnimplementedUserServer struct {
 }
 
+func (UnimplementedUserServer) Test(context.Context, *TestRequest) (*TestReply, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Test not implemented")
+}
 func (UnimplementedUserServer) GetMobile(context.Context, *MobileRequest) (*MobileReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetMobile not implemented")
 }
@@ -232,6 +246,24 @@ type UnsafeUserServer interface {
 
 func RegisterUserServer(s grpc.ServiceRegistrar, srv UserServer) {
 	s.RegisterService(&User_ServiceDesc, srv)
+}
+
+func _User_Test_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(TestRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(UserServer).Test(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/api.user.v1.user.User/Test",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(UserServer).Test(ctx, req.(*TestRequest))
+	}
+	return interceptor(ctx, in, info, handler)
 }
 
 func _User_GetMobile_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
@@ -475,6 +507,10 @@ var User_ServiceDesc = grpc.ServiceDesc{
 	ServiceName: "api.user.v1.user.User",
 	HandlerType: (*UserServer)(nil),
 	Methods: []grpc.MethodDesc{
+		{
+			MethodName: "Test",
+			Handler:    _User_Test_Handler,
+		},
 		{
 			MethodName: "GetMobile",
 			Handler:    _User_GetMobile_Handler,
