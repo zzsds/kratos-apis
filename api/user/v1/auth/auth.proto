@@ -10,11 +10,6 @@ import "google/protobuf/timestamp.proto";
 import "google/api/annotations.proto";
 
 service Auth {
-    rpc Test (RegisterRequest) returns (RegisterRequest) {
-        option (google.api.http) = {
-            get: "/v1/auth/{name}"
-        };
-    };
     rpc Register (RegisterRequest) returns (RegisterReply) {
         option (google.api.http) = {
             post: "/v1/auth/register"

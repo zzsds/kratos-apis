@@ -25,8 +25,6 @@ type AuthHandler interface {
 	Register(context.Context, *RegisterRequest) (*RegisterReply, error)
 
 	ResetPassword(context.Context, *ResetPasswordRequest) (*ResetPasswordReply, error)
-
-	Test(context.Context, *RegisterRequest) (*RegisterRequest, error)
 }
 
 func NewAuthHandler(srv AuthHandler, opts ...http1.HandleOption) http.Handler {
@@ -35,35 +33,6 @@ func NewAuthHandler(srv AuthHandler, opts ...http1.HandleOption) http.Handler {
 		o(&h)
 	}
 	r := mux.NewRouter()
-
-	r.HandleFunc("/v1/auth/{name}", func(w http.ResponseWriter, r *http.Request) {
-		var in RegisterRequest
-		if err := h.Decode(r, &in); err != nil {
-			h.Error(w, r, err)
-			return
-		}
-
-		if err := binding.MapProto(&in, mux.Vars(r)); err != nil {
-			h.Error(w, r, err)
-			return
-		}
-
-		next := func(ctx context.Context, req interface{}) (interface{}, error) {
-			return srv.Test(ctx, req.(*RegisterRequest))
-		}
-		if h.Middleware != nil {
-			next = h.Middleware(next)
-		}
-		out, err := next(r.Context(), &in)
-		if err != nil {
-			h.Error(w, r, err)
-			return
-		}
-		reply := out.(*RegisterRequest)
-		if err := h.Encode(w, r, reply); err != nil {
-			h.Error(w, r, err)
-		}
-	}).Methods("GET")
 
 	r.HandleFunc("/v1/auth/register", func(w http.ResponseWriter, r *http.Request) {
 		var in RegisterRequest
