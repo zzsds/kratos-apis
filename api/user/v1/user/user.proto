@@ -42,6 +42,10 @@ enum Enabled {
 	Yes = 1;
 }
 
+enum Source {
+	SELF = 0;
+}
+
 message SearchPageRequest {
 	int32 page = 1;
 	int32 size = 2;
@@ -84,12 +88,12 @@ message Resource {
 	string mobile = 4;
 	string email = 5;
 	string code = 6;
-	string source = 7;
-	google.protobuf.Timestamp birthday = 8;
+	Source source = 7;
+	string birthday = 8;
 	Enabled enabled = 9;
 	int32 id = 10;
-	google.protobuf.Timestamp createdAt = 11;
-	google.protobuf.Timestamp updatedAt = 12;
+	string createdAt = 11;
+	string updatedAt = 12;
 }
 
 message List {

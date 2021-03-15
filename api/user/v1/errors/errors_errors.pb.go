@@ -24,11 +24,46 @@ func IsContentMissing(err error) bool {
 }
 
 const (
-	Errors_MissingAuth = "Auth_MissingAuth"
+	Errors_MissingMobile       = "Auth_MissingMobile"
+	Errors_MissingPassword     = "Auth_MissingPassword"
+	Errors_AlreadyExistsMobile = "Auth_AlreadyExistsMobile"
+	Errors_AlreadyExistsCode   = "Auth_AlreadyExistsCode"
+	Errors_MissingSource       = "Auth_MissingSource"
+	Errors_RegisterFail        = "Auth_RegisterFail"
+	Errors_LoginFail           = "Auth_LoginFail"
+	Errors_FormatBirthday      = "Auth_FormatBirthday"
 )
 
-func IsMissingAuth(err error) bool {
-	return errors.Reason(err) == Errors_MissingAuth
+func IsMissingMobile(err error) bool {
+	return errors.Reason(err) == Errors_MissingMobile
+}
+
+func IsMissingPassword(err error) bool {
+	return errors.Reason(err) == Errors_MissingPassword
+}
+
+func IsAlreadyExistsMobile(err error) bool {
+	return errors.Reason(err) == Errors_AlreadyExistsMobile
+}
+
+func IsAlreadyExistsCode(err error) bool {
+	return errors.Reason(err) == Errors_AlreadyExistsCode
+}
+
+func IsMissingSource(err error) bool {
+	return errors.Reason(err) == Errors_MissingSource
+}
+
+func IsRegisterFail(err error) bool {
+	return errors.Reason(err) == Errors_RegisterFail
+}
+
+func IsLoginFail(err error) bool {
+	return errors.Reason(err) == Errors_LoginFail
+}
+
+func IsFormatBirthday(err error) bool {
+	return errors.Reason(err) == Errors_FormatBirthday
 }
 
 const (

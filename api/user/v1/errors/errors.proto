@@ -18,7 +18,14 @@ enum User {
 
 enum Auth {
     option (kratos.api.errors) = true;
-    MissingAuth = 0;
+    MissingMobile = 0;
+    MissingPassword = 1;
+    AlreadyExistsMobile = 2;
+    AlreadyExistsCode = 3;
+    MissingSource = 4;
+    RegisterFail = 5;
+    LoginFail = 6;
+    FormatBirthday = 7;
 }
 
 enum Profile {

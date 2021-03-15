@@ -6,7 +6,6 @@ option go_package = "github.com/zzsds/api-apis/api/user/v1/auth;auth";
 option java_multiple_files = true;
 option java_package = "api.user.v1.auth";
 
-import "google/protobuf/timestamp.proto";
 import "google/api/annotations.proto";
 
 service Auth {
@@ -38,7 +37,7 @@ message RegisterRequest {
 	string nickname = 5;
 	string realname = 6;
 	string source = 7;
-	google.protobuf.Timestamp birthday = 9;
+	string birthday = 9;
 }
 
 message RegisterReply {
@@ -49,6 +48,7 @@ message LoginRequest {
     string mobile = 1;
     string password = 2;
 }
+
 message LoginReply {
     int32 id = 1;
     string token = 2;
@@ -61,6 +61,7 @@ message ResetPasswordRequest {
     string mobile = 2;
     string password = 3;
 }
+
 message ResetPasswordReply {
     bool success = 1;
 }
