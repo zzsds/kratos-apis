@@ -18,7 +18,6 @@ const _ = grpc.SupportPackageIsVersion7
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type ProfileClient interface {
-	CreateProfile(ctx context.Context, in *CreateProfileRequest, opts ...grpc.CallOption) (*CreateProfileReply, error)
 	UpdateProfile(ctx context.Context, in *UpdateProfileRequest, opts ...grpc.CallOption) (*UpdateProfileReply, error)
 	DeleteProfile(ctx context.Context, in *DeleteProfileRequest, opts ...grpc.CallOption) (*DeleteProfileReply, error)
 	GetProfile(ctx context.Context, in *GetProfileRequest, opts ...grpc.CallOption) (*GetProfileReply, error)
@@ -31,15 +30,6 @@ type profileClient struct {
 
 func NewProfileClient(cc grpc.ClientConnInterface) ProfileClient {
 	return &profileClient{cc}
-}
-
-func (c *profileClient) CreateProfile(ctx context.Context, in *CreateProfileRequest, opts ...grpc.CallOption) (*CreateProfileReply, error) {
-	out := new(CreateProfileReply)
-	err := c.cc.Invoke(ctx, "/api.user.v1.profile.Profile/CreateProfile", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
 }
 
 func (c *profileClient) UpdateProfile(ctx context.Context, in *UpdateProfileRequest, opts ...grpc.CallOption) (*UpdateProfileReply, error) {
@@ -82,7 +72,6 @@ func (c *profileClient) ListProfile(ctx context.Context, in *ListProfileRequest,
 // All implementations must embed UnimplementedProfileServer
 // for forward compatibility
 type ProfileServer interface {
-	CreateProfile(context.Context, *CreateProfileRequest) (*CreateProfileReply, error)
 	UpdateProfile(context.Context, *UpdateProfileRequest) (*UpdateProfileReply, error)
 	DeleteProfile(context.Context, *DeleteProfileRequest) (*DeleteProfileReply, error)
 	GetProfile(context.Context, *GetProfileRequest) (*GetProfileReply, error)
@@ -94,9 +83,6 @@ type ProfileServer interface {
 type UnimplementedProfileServer struct {
 }
 
-func (UnimplementedProfileServer) CreateProfile(context.Context, *CreateProfileRequest) (*CreateProfileReply, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method CreateProfile not implemented")
-}
 func (UnimplementedProfileServer) UpdateProfile(context.Context, *UpdateProfileRequest) (*UpdateProfileReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UpdateProfile not implemented")
 }
@@ -120,24 +106,6 @@ type UnsafeProfileServer interface {
 
 func RegisterProfileServer(s grpc.ServiceRegistrar, srv ProfileServer) {
 	s.RegisterService(&Profile_ServiceDesc, srv)
-}
-
-func _Profile_CreateProfile_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(CreateProfileRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(ProfileServer).CreateProfile(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/api.user.v1.profile.Profile/CreateProfile",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ProfileServer).CreateProfile(ctx, req.(*CreateProfileRequest))
-	}
-	return interceptor(ctx, in, info, handler)
 }
 
 func _Profile_UpdateProfile_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
@@ -219,10 +187,6 @@ var Profile_ServiceDesc = grpc.ServiceDesc{
 	ServiceName: "api.user.v1.profile.Profile",
 	HandlerType: (*ProfileServer)(nil),
 	Methods: []grpc.MethodDesc{
-		{
-			MethodName: "CreateProfile",
-			Handler:    _Profile_CreateProfile_Handler,
-		},
 		{
 			MethodName: "UpdateProfile",
 			Handler:    _Profile_UpdateProfile_Handler,

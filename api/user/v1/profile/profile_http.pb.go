@@ -20,8 +20,6 @@ var _ = mux.NewRouter
 const _ = http1.SupportPackageIsVersion1
 
 type ProfileHandler interface {
-	CreateProfile(context.Context, *CreateProfileRequest) (*CreateProfileReply, error)
-
 	DeleteProfile(context.Context, *DeleteProfileRequest) (*DeleteProfileReply, error)
 
 	GetProfile(context.Context, *GetProfileRequest) (*GetProfileReply, error)
@@ -38,31 +36,7 @@ func NewProfileHandler(srv ProfileHandler, opts ...http1.HandleOption) http.Hand
 	}
 	r := mux.NewRouter()
 
-	r.HandleFunc("/v1/user", func(w http.ResponseWriter, r *http.Request) {
-		var in CreateProfileRequest
-		if err := h.Decode(r, &in); err != nil {
-			h.Error(w, r, err)
-			return
-		}
-
-		next := func(ctx context.Context, req interface{}) (interface{}, error) {
-			return srv.CreateProfile(ctx, req.(*CreateProfileRequest))
-		}
-		if h.Middleware != nil {
-			next = h.Middleware(next)
-		}
-		out, err := next(r.Context(), &in)
-		if err != nil {
-			h.Error(w, r, err)
-			return
-		}
-		reply := out.(*CreateProfileReply)
-		if err := h.Encode(w, r, reply); err != nil {
-			h.Error(w, r, err)
-		}
-	}).Methods("POST")
-
-	r.HandleFunc("/v1/user/{id}", func(w http.ResponseWriter, r *http.Request) {
+	r.HandleFunc("/v1/user/profile/{id}", func(w http.ResponseWriter, r *http.Request) {
 		var in UpdateProfileRequest
 		if err := h.Decode(r, &in); err != nil {
 			h.Error(w, r, err)
@@ -91,7 +65,7 @@ func NewProfileHandler(srv ProfileHandler, opts ...http1.HandleOption) http.Hand
 		}
 	}).Methods("PUT")
 
-	r.HandleFunc("/v1/user/{id}", func(w http.ResponseWriter, r *http.Request) {
+	r.HandleFunc("/v1/user/profile/{id}", func(w http.ResponseWriter, r *http.Request) {
 		var in DeleteProfileRequest
 		if err := h.Decode(r, &in); err != nil {
 			h.Error(w, r, err)
@@ -120,7 +94,7 @@ func NewProfileHandler(srv ProfileHandler, opts ...http1.HandleOption) http.Hand
 		}
 	}).Methods("DELETE")
 
-	r.HandleFunc("/v1/user/{id}/{name}", func(w http.ResponseWriter, r *http.Request) {
+	r.HandleFunc("/v1/user/profile/{id}", func(w http.ResponseWriter, r *http.Request) {
 		var in GetProfileRequest
 		if err := h.Decode(r, &in); err != nil {
 			h.Error(w, r, err)

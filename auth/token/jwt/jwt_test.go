@@ -18,7 +18,6 @@ func TestGenerate(t *testing.T) {
 	j := NewTokenProvider(
 		token.WithPrivateKey(string(privKey)),
 	)
-
 	_, err = j.Generate(&auth.Account{ID: "test"})
 	if err != nil {
 		t.Fatalf("Generate returned %v error, expected nil", err)
