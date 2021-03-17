@@ -34,7 +34,7 @@ func NewAuthHandler(srv AuthHandler, opts ...http1.HandleOption) http.Handler {
 	}
 	r := mux.NewRouter()
 
-	r.HandleFunc("/v1/auth/register", func(w http.ResponseWriter, r *http.Request) {
+	r.HandleFunc("/v1/user/auth/register", func(w http.ResponseWriter, r *http.Request) {
 		var in RegisterRequest
 		if err := h.Decode(r, &in); err != nil {
 			h.Error(w, r, err)
@@ -58,7 +58,7 @@ func NewAuthHandler(srv AuthHandler, opts ...http1.HandleOption) http.Handler {
 		}
 	}).Methods("POST")
 
-	r.HandleFunc("/v1/auth/login", func(w http.ResponseWriter, r *http.Request) {
+	r.HandleFunc("/v1/user/auth/login", func(w http.ResponseWriter, r *http.Request) {
 		var in LoginRequest
 		if err := h.Decode(r, &in); err != nil {
 			h.Error(w, r, err)
@@ -82,7 +82,7 @@ func NewAuthHandler(srv AuthHandler, opts ...http1.HandleOption) http.Handler {
 		}
 	}).Methods("POST")
 
-	r.HandleFunc("/v1/auth/resetPassword", func(w http.ResponseWriter, r *http.Request) {
+	r.HandleFunc("/v1/user/auth/resetPassword", func(w http.ResponseWriter, r *http.Request) {
 		var in ResetPasswordRequest
 		if err := h.Decode(r, &in); err != nil {
 			h.Error(w, r, err)

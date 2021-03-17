@@ -10,11 +10,11 @@ import "google/api/annotations.proto";
 import "google/protobuf/timestamp.proto";
 
 service User {
-	rpc Test(TestRequest) returns (TestReply) {
+	rpc Info (InfoRequest) returns (InfoReply) {
 		option (google.api.http) = {
-			get: "/v1/user/{name}"
+			get: "/v1/user/info"
 		};
-	}
+	};
 	rpc GetMobile(MobileRequest) returns (MobileReply) {};
 	rpc ModifyPassword(ModifyPassRequest) returns (ModifyPassReply) {};
 	rpc ModifyMobile(ModifyMobileRequest) returns (ModifyMobileReply) {};
@@ -30,11 +30,11 @@ service User {
 	rpc SearchPage(SearchPageRequest) returns (List) {};
 }
 
-message TestRequest {
-	string name = 1;
+message InfoRequest {
+	int32 id = 1;
 }
-message TestReply {
-	string name = 1;
+message InfoReply {
+	Resource data = 1;
 }
 
 enum Enabled {

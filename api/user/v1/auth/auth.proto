@@ -11,19 +11,19 @@ import "google/api/annotations.proto";
 service Auth {
     rpc Register (RegisterRequest) returns (RegisterReply) {
         option (google.api.http) = {
-            post: "/v1/auth/register"
+            post: "/v1/user/auth/register"
             body: "*"
         };
     };
     rpc Login (LoginRequest) returns (LoginReply) {
         option (google.api.http) = {
-            post: "/v1/auth/login"
+            post: "/v1/user/auth/login"
             body: "*"
         };
     };
     rpc ResetPassword (ResetPasswordRequest) returns (ResetPasswordReply) {
         option (google.api.http) = {
-            post: "/v1/auth/resetPassword"
+            post: "/v1/user/auth/resetPassword"
             body: "*"
         };
     };
@@ -51,10 +51,10 @@ message LoginRequest {
 }
 
 message LoginReply {
-    int32 id = 1;
-    string token = 2;
-    string expiresAt = 3;
-    map<string,string> other = 4;
+    string token = 1;
+    string expiresAt = 2;
+    // int32 id = 3;
+    // map<string,string> other = 3;
 }
 
 message ResetPasswordRequest {

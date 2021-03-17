@@ -36,6 +36,8 @@ type UserHandler interface {
 
 	GetMobile(context.Context, *MobileRequest) (*MobileReply, error)
 
+	Info(context.Context, *InfoRequest) (*InfoReply, error)
+
 	ModifyMobile(context.Context, *ModifyMobileRequest) (*ModifyMobileReply, error)
 
 	ModifyName(context.Context, *ModifyNameRequest) (*ModifyNameReply, error)
@@ -45,8 +47,6 @@ type UserHandler interface {
 	SearchPage(context.Context, *SearchPageRequest) (*List, error)
 
 	SourceTypeList(context.Context, *SourceTypeRequest) (*SourceTypeReply, error)
-
-	Test(context.Context, *TestRequest) (*TestReply, error)
 }
 
 func NewUserHandler(srv UserHandler, opts ...http1.HandleOption) http.Handler {
@@ -56,20 +56,15 @@ func NewUserHandler(srv UserHandler, opts ...http1.HandleOption) http.Handler {
 	}
 	r := mux.NewRouter()
 
-	r.HandleFunc("/v1/user/{name}", func(w http.ResponseWriter, r *http.Request) {
-		var in TestRequest
+	r.HandleFunc("/v1/user/info", func(w http.ResponseWriter, r *http.Request) {
+		var in InfoRequest
 		if err := h.Decode(r, &in); err != nil {
 			h.Error(w, r, err)
 			return
 		}
 
-		if err := binding.MapProto(&in, mux.Vars(r)); err != nil {
-			h.Error(w, r, err)
-			return
-		}
-
 		next := func(ctx context.Context, req interface{}) (interface{}, error) {
-			return srv.Test(ctx, req.(*TestRequest))
+			return srv.Info(ctx, req.(*InfoRequest))
 		}
 		if h.Middleware != nil {
 			next = h.Middleware(next)
@@ -79,7 +74,7 @@ func NewUserHandler(srv UserHandler, opts ...http1.HandleOption) http.Handler {
 			h.Error(w, r, err)
 			return
 		}
-		reply := out.(*TestReply)
+		reply := out.(*InfoReply)
 		if err := h.Encode(w, r, reply); err != nil {
 			h.Error(w, r, err)
 		}
